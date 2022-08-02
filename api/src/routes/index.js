@@ -2,53 +2,76 @@ const { Router } = require('express');
 const axios = require ("axios");
 const express = require('express');
 const { Race, Temperament } = require("../db")
-// const { MY_API_KEY } = process.env
+const { MY_API_KEY } = process.env
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 
 
 const router = Router();
-router.use(express.json());
+
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 // router.get("/", (req, res)=>{
 //     res.send("bienvenido, todo ok")
 // })
 
-router.get("/dogs", async(req, res)=>{
-    
-    try {
-        const api= await axios("https://api.thedogapi.com/v1/breeds");
-        const datos= await api.data.map((e)=>{
-        const obj={
-            name: e.name,
-            height:e.height.metric,
-            weight: e.weight.metric,
-            life_span: e.life_span,
-            temperament:e.temperament,
-            image: e.image.url,
-        };
-        return obj;
-    });
-        const db= await Race.findAll({ include:[{ model: Temperament }]});
-        const total = [ ... datos, ...db]
-        res.send(total)
-   
-    } catch (error) {
-        console.log(error)
+const getApiInfo = async ()=>{
+    const api= await axios(`https://api.thedogapi.com/v1/breeds?api_key=${MY_API_KEY}`);
+    const datos= await api.data.map(e=> {
+    return{
+        name: e.name,
+        height:e.height.metric,
+        weight: e.weight.metric,
+        life_span: e.life_span,
+        temperament:e.temperament,
+        image: e.image.url,
+    };
+});
+    return datos;
+}
+
+const getDbInfo = async ()=>{
+    return await Race.findAll({ include:[{ model: Temperament }]});
+}
+
+const getAllDogs = async ()=>{
+    const apiInfo = await getApiInfo();
+    const dbInfo = await getDbInfo();
+    const total = apiInfo.concat(dbInfo);
+    return total;
+}
+
+router.get("/dogs", async (req, res)=>{
+    const { name } = req.query;
+    const perritos = await getAllDogs()
+        if (name) {
+            let perro= await perritos.filter(el=>el.name.toLowerCase().includes(name.toLowerCase()));
+            perro.lenght ? res.send(perro) : res.send("No se encontró la raza")
+        }else{
+            res.send(perritos);
+        }
+})
+
+router.get("/dogs/:id", async (req, res)=>{
+    const { id } = req.params;
+    const allDogs = await getAllDogs();
+    if (id){
+        let dog = allDogs.filter(el => el.id == id);
+        dog.lenght ?
+        res.send(dog):
+        res.send("Perro no encontrado");
     }
 });
-
-router.get("/dogs", async(req, res)=>{
-    const { name } = req.query
-    if (name) {
-        let api= await axios ("https://api.thedogapi.com/v1/breeds");
-        let perrito = await api.data.filter(el=>el.name.toLowerCase().includes(name.toLowerCase()));
-        perrito.lenght ?
-        res.send(perrito) :
-        res.send("No se encontró");
-    }
-})
+// router.get("/dogs/:id", async(req, res) => {
+//     const { id } = req.params;
+//     const allDogs = await getAllDogs();
+//     const dog = allDogs.filter(el => el.id == id);
+//     if (dog.length) {
+//         res.send(dog);
+//     }else{
+//         res.send("Perro no encontrado");
+//     }
+// });
 
 router.post("/dogs", async (req, res)=>{
     let {
@@ -88,5 +111,18 @@ router.post("/dogs", async (req, res)=>{
             }
         })
         
-        module.exports = router;
+router.get("/temperaments", async (req,res)=>{
+    const api= await axios(`https://api.thedogapi.com/v1/breeds?api_key=${MY_API_KEY}`);
+    const temp= api.data.map(e=>e.temperament);
+    const temps= temp.toString().split(",");
+    temps.forEach(el => {
+        Temperament.findOrCreate({
+             where: { name: el }
+        })
+    })
+    const allTemp = await Temperament.findAll();    
+    res.send(allTemp);
+});
+
+module.exports = router;
         
