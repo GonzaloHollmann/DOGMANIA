@@ -25,6 +25,7 @@ const getApiInfo = async ()=>{
         life_span: e.life_span,
         temperament:e.temperament,
         image: e.image.url,
+        id:e.id,
     };
 });
     return datos;
@@ -43,35 +44,41 @@ const getAllDogs = async ()=>{
 
 router.get("/dogs", async (req, res)=>{
     const { name } = req.query;
-    const perritos = await getAllDogs()
-        if (name) {
-            let perro= await perritos.filter(el=>el.name.toLowerCase().includes(name.toLowerCase()));
-            perro.lenght ? res.send(perro) : res.send("No se encontró la raza")
-        }else{
-            res.send(perritos);
-        }
+try {
+  const perritos = await getAllDogs();
+  if (!name) {
+    res.status(200).send(perritos);
+  }
+  let perro = perritos.find(el=>el.name.toLowerCase().includes(name.toLowerCase()));
+  Object.keys(perro).length >= 1
+    ? res.status(200).send(perro)
+    : res.status(401).send({ error: "No se encontro perro" });
+} catch (error) {
+  console.log(error);
+}
 })
 
 router.get("/dogs/:id", async (req, res)=>{
     const { id } = req.params;
     const allDogs = await getAllDogs();
-    if (id){
-        let dog = allDogs.filter(el => el.id == id);
-        dog.lenght ?
-        res.send(dog):
-        res.send("Perro no encontrado");
+    // console.log(allDogs)
+    try {
+        if(!id){
+            res.status(200).send(allDogs);  
+        }
+        let dog= allDogs.find((el)=>el.id==id
+            // {
+            //     // console.log(el)
+            //     console.log(el.id, '==', id)
+            // }
+        ) 
+        // console.log(dog)
+        if (dog) res.status(200).send(dog)
+        else res.status(401).send({ error: "No se encontro perro" });
+    } catch (error) {
+        console.log(error)
     }
-});
-// router.get("/dogs/:id", async(req, res) => {
-//     const { id } = req.params;
-//     const allDogs = await getAllDogs();
-//     const dog = allDogs.filter(el => el.id == id);
-//     if (dog.length) {
-//         res.send(dog);
-//     }else{
-//         res.send("Perro no encontrado");
-//     }
-// });
+})
 
 router.post("/dogs", async (req, res)=>{
     let {
