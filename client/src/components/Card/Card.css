@@ -1,0 +1,30 @@
+.contenedor{
+  border: rgba(63, 63, 63, 0.507) solid 1px;
+  background-color: rgba(0, 0, 0, 0.350);
+  /* position:relative; */
+  /* width: 30%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* align-items: center; */
+  /* margin: 10px 7px 15px 0px;
+  padding: 3px 3px 3px 3px; */ 
+  width: 92.5%;
+  overflow: hidden;
+  position: relative;
+}
+.imagen{
+  height: auto;
+  width: auto;
+  max-height: 300px;
+  max-width: 300px;
+}
+.card-title{
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+.card-info{
+  color: white;
+  font-size: 15px;
+}

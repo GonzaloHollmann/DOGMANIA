@@ -1,0 +1,20 @@
+.home{
+  background-image: url("./dog-home.jpg");
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 5% 0.9%;
+  justify-items: center;
+  padding: 2rem 0 2rem 0;
+    /* display: flex;
+    flex-wrap: wrap; */
+    /* justify-content: center; */
+  }

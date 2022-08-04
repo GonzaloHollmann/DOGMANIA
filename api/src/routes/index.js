@@ -18,10 +18,19 @@ const router = Router();
 const getApiInfo = async ()=>{
     const api= await axios(`https://api.thedogapi.com/v1/breeds?api_key=${MY_API_KEY}`);
     const datos= await api.data.map(e=> {
-    return{
+    
+        let heightArray = [];
+        if (e.height.metric) {
+            heightArray = e.height.metric.split(" - ");
+        }
+        let weightArray = [];
+        if (e.weight.metric) {
+            weightArray = e.weight.metric.split(" - ");
+        }
+        return{
         name: e.name,
-        height:e.height.metric,
-        weight: e.weight.metric,
+        height:heightArray,
+        weight: weightArray,
         life_span: e.life_span,
         temperament:e.temperament,
         image: e.image.url,
