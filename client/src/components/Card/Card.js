@@ -1,15 +1,17 @@
 import React from "react";
 import "./Card.css";
+import { Link } from "react-router-dom";
 
-export default function Card({ name, image, temperament }){
+export default function Card({ name, image, temperament, id }){
     return(
         <div className="contenedor">
             <div className="card">
-                <h3 className="card-title">{name}</h3>
+                <Link to ={`/dogs/${id}`}><h3 className="card-title">{name}</h3></Link>
+                <img className="imagen" src={image} alt="img not found"/>
                     <div className="card-body">
-                        <h5 className="card-info">{temperament}</h5>
-                        <h5>{image}</h5>
-                        <img className="imagen" src={image} alt="img not found"/>
+                       {temperament.map((el, index)=>{
+                        return <h5 key={index}>{el}</h5>                       
+                       })}
                     </div>
             </div>
         </div>

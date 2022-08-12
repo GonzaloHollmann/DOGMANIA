@@ -6,15 +6,12 @@
   background-attachment: fixed;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  /* justify-content: center; */
 }
 .cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 5% 0.9%;
+  display: flex;
   justify-items: center;
   padding: 2rem 0 2rem 0;
-    /* display: flex;
-    flex-wrap: wrap; */
-    /* justify-content: center; */
-  }
+  flex-wrap: wrap;
+  justify-content: center;
+}

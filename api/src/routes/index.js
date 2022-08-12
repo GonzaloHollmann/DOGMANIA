@@ -19,6 +19,10 @@ const getApiInfo = async ()=>{
     const api= await axios(`https://api.thedogapi.com/v1/breeds?api_key=${MY_API_KEY}`);
     const datos= await api.data.map(e=> {
     
+        let temperamentArray = [];
+        if (e.temperament) {//pregunto que exista el temperamento y lo devuelvo en un arreglo
+        temperamentArray = e.temperament.split(", ");
+        }
         let heightArray = [];
         if (e.height.metric) {
             heightArray = e.height.metric.split(" - ");
@@ -32,14 +36,14 @@ const getApiInfo = async ()=>{
         height:heightArray,
         weight: weightArray,
         life_span: e.life_span,
-        temperament:e.temperament,
+        temperament: temperamentArray,
         image: e.image.url,
         id:e.id,
     };
 });
     return datos;
 }
-
+// Busco toda la info de la db y el include sirve para traer la tabla intermedia.
 const getDbInfo = async ()=>{
     return await Race.findAll({ include:[{ model: Temperament }]});
 }
@@ -50,16 +54,19 @@ const getAllDogs = async ()=>{
     const total = apiInfo.concat(dbInfo);
     return total;
 }
-
+// Consultas a la db y api si o si deben esperar
+//
 router.get("/dogs", async (req, res)=>{
     const { name } = req.query;
+    // console.log("estoy en la ruta" , name)
 try {
   const perritos = await getAllDogs();
   if (!name) {
     res.status(200).send(perritos);
   }
-  let perro = perritos.find(el=>el.name.toLowerCase().includes(name.toLowerCase()));
-  Object.keys(perro).length >= 1
+  let perro = perritos.filter(el=>el.name.toLowerCase().includes(name.toLowerCase())); //filter devuelve nuevo []
+//   console.log(perro, "soy el resultado del find")
+  perro.length >= 1
     ? res.status(200).send(perro)
     : res.status(401).send({ error: "No se encontro perro" });
 } catch (error) {
@@ -70,10 +77,10 @@ try {
 router.get("/dogs/:id", async (req, res)=>{
     const { id } = req.params;
     const allDogs = await getAllDogs();
-    // console.log(allDogs)
+    console.log(id)
     try {
         if(!id){
-            res.status(200).send(allDogs);  
+            res.status(401).send({ error: "El id no es válido" });  
         }
         let dog= allDogs.find((el)=>el.id==id
             // {
@@ -81,7 +88,7 @@ router.get("/dogs/:id", async (req, res)=>{
             //     console.log(el.id, '==', id)
             // }
         ) 
-        // console.log(dog)
+        console.log(dog)
         if (dog) res.status(200).send(dog)
         else res.status(401).send({ error: "No se encontro perro" });
     } catch (error) {
@@ -131,9 +138,11 @@ router.get("/temperaments", async (req,res)=>{
     const api= await axios(`https://api.thedogapi.com/v1/breeds?api_key=${MY_API_KEY}`);
     const temp= api.data.map(e=>e.temperament);
     const temps= temp.toString().split(",");
-    temps.forEach(el => {
+    let tempUnicos= new Set (temps)
+    let resFinal = Array.from(tempUnicos)
+    resFinal.forEach((el, index) => {
         Temperament.findOrCreate({
-             where: { name: el }
+             where: { name: el, id: index }
         })
     })
     const allTemp = await Temperament.findAll();    
