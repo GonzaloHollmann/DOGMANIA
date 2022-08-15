@@ -1,0 +1,77 @@
+.main_container{
+background-image: url("./dog-detail.jpg");
+background-repeat: no-repeat;
+background-size: cover;
+background-attachment: fixed;
+display: flex;
+justify-content: center;
+align-items: center;
+display: grid;
+align-content: center;
+justify-content: center;
+height: 100vh;
+}
+.sub_container{
+    width: 105%;
+    border: 0.5rem solid #000000;
+    border-radius: 12px;
+}
+.container_elements{
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    left: 25%;
+    top: 25%;
+    color: #ffffff;
+    background-color: #0000009c;
+    padding: 1rem 0 1rem 1rem;
+}
+.sub_container img{
+    width: 450px;
+    max-width: 600px;
+    max-height: 370px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+.right_container{
+    padding-left: 5%;
+}
+
+.right_container h1{
+    margin: 0;
+}
+
+.right_container h3{
+    margin: 0.6rem;
+}
+.list_container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0;
+}
+
+.list_container li{
+    list-style: none;
+    padding: 0.2rem 0.4rem;
+}
+/* .card{
+ width: auto;
+ height: auto;
+ background-color: rgba(0, 0, 0, 0.350);
+ box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+} */
+
+.button {
+    color: #ffffff;
+    padding: 0.7em 1.7em;
+    margin: 10px 10px;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    background: #000000ce;
+}
+
+.button_add_dog{
+    cursor: pointer;
+}
+   
+   

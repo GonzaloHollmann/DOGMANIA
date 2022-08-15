@@ -1,0 +1,44 @@
+a{
+  text-decoration: none;
+  
+}
+
+.main_container{
+  font-size: 0.7rem;
+  text-decoration: none;
+  max-height: 50vh;
+  overflow: hidden;
+  color: #080808;
+  position: relative;
+}
+
+/* .imagen{
+  height: auto;
+  width: auto;
+  max-height: 300px;
+  max-width: 300px;
+} */
+.image_container{
+  height: 29vh;
+  border-radius: 7px;
+}
+
+.image_container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main_container h2{
+  color: white;
+}
+
+.temperaments_container{
+  text-decoration: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0 0.7rem;
+}
+
+.temperaments_container h3{
+  margin: 0 0.3rem 0.4rem 0.3rem;
+}

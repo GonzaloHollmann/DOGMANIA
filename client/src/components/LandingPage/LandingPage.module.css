@@ -1,0 +1,36 @@
+.main_container{
+    background-image: url("./dog-landing.jpg");
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;    
+    background-position-y: center;
+}
+.titleApp{
+    color: white;
+    font-weight: bold;
+    font-size: 4rem;
+    margin-bottom: 3%;
+}
+h3{
+    color: white;
+    font-size: 1.4rem;
+    
+}
+p{
+    color: white;
+    font-size: 1rem;
+    text-align:center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3%;
+}
+
+.button_home{
+    color: #ffffff;
+    padding: 0.7em 1.7em;
+    margin: 10px 10px;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    background: #000000ce;
+}

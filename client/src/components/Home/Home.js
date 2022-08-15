@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Card from "../Card/Card";
 import Paginado from "../Paginado/Paginado";
 import SearchBar from "../SearchBar/SearchBar";
-import "./Home.css";
+import styles from "./Home.module.css";
 
 export default function Home (){
     const dispatch = useDispatch();
@@ -56,18 +56,21 @@ function handleFilterCreated(e){
     setCurrentPage(1);
 }
     return(
-        <div className="home">
-    <Link to = "/dogs">Create dog</Link>
-    <button onClick={e=>{handleClick(e)}}>Reload</button>
-    <div>
+        <div className={styles.all}>
+        <header className={styles.header}>
+        <div className={`${styles.header_container_left}`}>
+    
+    <div className={`${styles.logo}`} onClick={e=>{handleClick(e)}}></div>
+    <div className={`${styles.header_left}`}>
     <SearchBar/>
+    <div className={`${styles.container_filters}`}>
         <select onChange={e=>{handleSortByName(e)}}>
             <option value="asc">A - Z</option>
             <option value="desc">Z - A</option>
         </select>
         <select onChange={e=>{handleSortByWeight(e)}}>
-            <option value="max_weight">Max</option>
-            <option value="min_weight">Min</option>
+            <option value="max_weight">+ Weight</option>
+            <option value="min_weight">- Weight</option>
         </select>
         <select onChange={e => { handleFilterTemps(e) }}>
             <option key={0} value='all'>Temperamentos</option>
@@ -86,23 +89,35 @@ function handleFilterCreated(e){
             <option value="created">Created</option>
             <option value="api">API</option>
         </select>
-        <Paginado
-              dogsPerPage={dogsPerPage}
-              allDogs={allDogs.length}
-              paginado= {paginado}
-            />
-
+        </div>
+        </div>
+        </div>
+        <div className={`${styles.header_right}`}>
+        <Link to = "/dogs"><button className={`${styles.button_add_dog}`}>Create dog</button></Link>
+        </div>
+        </header>
+        <hr/>
+       
+       <div className={styles.main_container}>
+        <div className={styles.container_cards}>
     {
     currentDog?.map((el)=>{
         return(
-            <div className="cards">
+            <div className={styles.container_card}>
                      <Card name={el.name} image={el.image} temperament={el.temperament} id={el.id} />   
             </div>
         )
     })
-    }
-
-    </div>
+    } 
+        </div> 
+            <div className={`${styles.pagination}`}>
+                <Paginado
+              dogsPerPage={dogsPerPage}
+              allDogs={allDogs.length}
+              paginado= {paginado}
+            />
+            </div>
+            </div>
         </div>
     )
 }

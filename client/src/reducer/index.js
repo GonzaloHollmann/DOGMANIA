@@ -81,18 +81,39 @@ function rootReducer(state=initialState, action){
         }
     case "FILTER_BY_TEMP":
         const allDogs = state.allDogs; // Al usar state.allDogs en lugar de state.dogs, cada vez que aplique un filtro, state.dogs va a cambiar, pero voy a seguir teniendo guardados todos los perros en mi state.allDogs, entonces voy a poder cambiar de filtro sin tener que volver a cargar la página.
-        const temperamentFiltered = action.payload === 'all' ? allDogs : allDogs.filter(el => {
-            if (typeof (el.temperaments) === 'string') return el.temperaments.includes(action.payload);
-            if (Array.isArray(el.temperaments)) {
-                let temps = el.temperaments.map(el => el.name);
+        // console.log("me traigo todos los perros", allDogs)
+        const temperamentFiltered = action.payload === 'all' ? allDogs
+        : allDogs.flat().filter(el => {
+            // if (typeof (el.temperament) === 'string') return el.temperament.includes(action.payload);
+            // if (Array.isArray(el.temperament)) {
+                let temps = el.temperament.map(el => el.name);
                 return temps.includes(action.payload);
-            }
-            return true;
+            // }
+            // return true;
         });
+        console.log("filtrado", temperamentFiltered)
         return {
             ...state,
             dogs: temperamentFiltered
         }
+    // case "FILTER_BY_TEMP":
+    //   const allDogs = state.allDogs;
+    //   let filteredDogs = [];
+    //   if (action.payload === "all") {
+    //     filteredDogs = allDogs;
+    //   } else {
+    //     for (let i = 0; i < allDogs.length; i++) {
+    //       let found = allDogs[i].temperament.find((t) => t === action.payload);
+    //       if (found) {
+    //         filteredDogs.push(allDogs[i]);
+    //       } //todos los perros en la posicion de ese momento
+    //     }
+    //   }
+    //   return {
+    //     //return funciona correcto
+    //     ...state,
+    //     dogs: filteredDogs,
+    //   };
         case "FILTER_CREATED":
             const todos = state.dogs    
             const createdFilter = action.payload === "created" ? todos.filter(el=>el.createdInDb) : todos.filter(el=> !el.createdInDb);

@@ -1,0 +1,98 @@
+.all{
+  background-image: url("./dog-home.jpg");
+  background-repeat: no-repeat;
+  background-size: cover; 
+}
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  background-color: hsla(0, 0%, 2%, 0.507);
+}
+.logo{
+  float: left;
+  height: 100%;
+  width: 95px;
+  margin: 0.3rem 0;
+  background-image: url("./dog.png");
+  background-size: cover;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.header_container_left{
+  margin: 0 6%;
+  padding-bottom: 0.5rem;
+  display: block;
+}
+
+.header_left{
+  padding-top: 0.6rem;
+}
+
+.container_filters{
+  width: 190%;
+  margin-top: 1.3rem;
+  border-radius: 25px;
+}
+.container_filters select{
+  padding: 0.5rem 0.9rem;
+  border: none;
+  background-color: #000000;
+  color: white;
+  cursor: pointer;
+}
+
+.container_filters select:first-child{
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.container_filters select:last-child{
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.header_right{
+  margin: 0.5rem 6%;
+}
+
+.button_add_dog{
+  width: 100%;
+  max-width: 370px;
+  font-size: 0.9rem; 
+  background: none;
+  padding: 0.6rem 0.6rem;
+  background: #000000ce;
+  color: white;
+  border-radius: 12px;
+}
+
+.main_container{
+  margin: 0 5% 0 5%;
+}
+.container_cards{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 5% 0.9%;
+  justify-items: center;
+  padding: 2rem 0 2rem 0;
+}
+.container_card{ /* estilos de carta individual */
+  background-color: #ffffffb0;
+  width: 92.5%;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+.container_card:hover{
+  cursor: pointer;
+}
+/* .cards {
+ width: 330px;
+ height: 630px;
+} */
+.pagination{
+  margin-left: 0;
+  padding-left: 0;
+}

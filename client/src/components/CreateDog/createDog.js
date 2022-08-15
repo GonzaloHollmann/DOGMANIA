@@ -3,7 +3,24 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { getTemps, createDog } from "../../actions";
+import styles from "./CreateDog.module.css";
 
+function validate(input){
+    let errors = {};
+    if(!input.name){
+        errors.name = "Name is required."
+    }
+    if(!input.min_height || !input.max_height) {
+        errors.height = "Height is required"
+    }
+    if(!input.min_weight || !input.max_weight) {
+        errors.weight = "Weight is required"
+    }
+    if(!input.life_span) {
+        errors.life_span = "Lifespan is required, type only numbers separated by a dash (-)"
+    }
+    return errors
+}
 export default function CreateDog(){
     const dispatch = useDispatch();
     const history = useHistory();
@@ -18,12 +35,26 @@ export default function CreateDog(){
         temperament: [],
         image: "",
     })
+    const [button, setButton] = useState(true);
+    const [errors, setErrors] = useState({
+        name: "",
+        min_height: "",
+        max_height: "",
+        min_weight: "",
+        max_weight: "",
+        life_span:  "",
+        image: "",
+    });
 
     function handleChange(e){
         setInput({
             ...input,
             [e.target.name] : e.target.value
         })
+        setErrors(validate({
+            ...input,
+            [e.target.name] : e.target.value
+        }))
     }
     function handleSelect(e){
         setInput({
@@ -54,24 +85,30 @@ export default function CreateDog(){
             temperaments: input.temperaments.filter(temp=> temp !== el)
         });
     }
+    useEffect(()=>{
+        if (input.name.length > 0 && input.min_height.length > 0  && input.max_height.length > 0 && input.min_weight.length > 0 && input.max_weight.length > 0) setButton(false)
+        else setButton(true)
+    }, [input, setButton]);
     
     useEffect(()=>{
         dispatch(getTemps());
     },[]);
 
     return(
-        <div>
-            <Link to = "/home"><button>Home</button></Link>
-            <h1>Create Dog!</h1>
-            <form onSubmit={(e)=> handleSubmit(e)}>
+        <div className={styles.main}>
+            <div className={styles.container}>
+                <Link to = "/home"><button className={styles.button}>Home</button></Link>
+            <form onSubmit={(e)=> handleSubmit(e)} className={`${styles.form}`}>
                 <div>
                     <label>Name:</label>
-                    <input
+                    <input className={styles.input_name}
                     type="text"
+                    autoComplete="off"
                     value={input.name}
                     name="name"
                     onChange={(e) => handleChange(e)}
                     />
+                    {errors.name && <p>{errors.name}</p>}
                 </div>
                 <div>
                     <label>Min height:</label>
@@ -90,6 +127,7 @@ export default function CreateDog(){
                     name="max_height"
                     onChange={(e) => handleChange(e)}
                     />
+                    {errors.height && <p>{errors.height}</p>}
                 </div>
                 <div>
                     <label>Min Weight:</label>
@@ -108,6 +146,7 @@ export default function CreateDog(){
                     name="max_weight"
                     onChange={(e) => handleChange(e)}
                     />
+                    {errors.weight && <p>{errors.weight}</p>}
                 </div>
                 <div>
                     <label>Life Span:</label>
@@ -117,6 +156,7 @@ export default function CreateDog(){
                     name="life_span"
                     onChange={(e) => handleChange(e)}
                     />
+                    {errors.life_span && <p>{errors.life_span}</p>}
                 </div>
                 <div>
                     <label>Image:</label>
@@ -151,9 +191,9 @@ export default function CreateDog(){
                         )
                     })}
                 </div>
-                <button type="submit">Create</button>
+                <button className={styles.add_dog} type="submit" disabled={button}>Create</button>
             </form>
-
+            </div>
         </div>
     )
 }
